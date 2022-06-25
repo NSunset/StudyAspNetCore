@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nw.Behavior\Nw.Behavior.csproj" />
+    <ProjectReference Include="..\Nw.Create\Nw.Create.csproj" />
+    <ProjectReference Include="..\Nw.Structural\Nw.Structural.csproj" />
+  </ItemGroup>
+
+</Project>

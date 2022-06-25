@@ -1,0 +1,14 @@
+//创建镜像
+docker build -t live.authorzation:v1 .
+
+//创建容器
+docker run --name myliveauthorzation -dp 7008:80 -v /project/api/live.authorzationcenter/:/app live.authorzation:v1
+
+
+
+
+//添加画图引用的包,不然画验证码等使用了Bitmap对象的方法会报错\
+1、进入容器
+2、apt-get update -y
+3、apt-get install -y libgdiplus
+4、ln -s /usr/lib/libgdiplus.so /usr/lib/gdiplus.dll

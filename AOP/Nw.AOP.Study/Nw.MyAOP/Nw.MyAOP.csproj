@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nw.AOP.DynamicProxy\Nw.AOP.DynamicProxy.csproj" />
+    <ProjectReference Include="..\Nw.AOP.StaticProxy\Nw.AOP.StaticProxy.csproj" />
+  </ItemGroup>
+
+</Project>

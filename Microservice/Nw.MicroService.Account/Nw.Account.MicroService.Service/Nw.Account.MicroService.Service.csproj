@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nw.Account.MicroService.IService\Nw.Account.MicroService.IService.csproj" />
+    <ProjectReference Include="..\Nw.Account.MicroService.Models\Nw.Account.MicroService.Models.csproj" />
+    <ProjectReference Include="..\Nw.Account.MicroService.Repository\Nw.Account.MicroService.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

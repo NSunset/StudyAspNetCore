@@ -1,0 +1,14 @@
+1、开源，轻量级，调度框架。数据库支持，集群，插件。支持cron-like表达式
+
+2、Scheduler：调度器，工作时的独立容器
+3、Trigger：触发器，定义了调度的时间规则
+4、Job：调度的任务
+5、ThreadPool：线程池（不是clr中的线程池），任务最终交给线程池中的线程执行
+6、JobStore：RAWStore和DbStore两种，job和trigger都放在JobStore中
+
+7、DisallowConcurrentExecution特性：保证任务不会重叠执行
+8、PersistJobDataAfterExecution特性+put方法：每次执行任务，需要上一次执行任务的结果，有状态。
+
+9、windows服务托管
+	1、新建一个windows服务
+	2、在服务中添加安装程序

@@ -1,0 +1,12 @@
+1、可以支持多种协议，多宿主，可以做到双工
+2、通过vs新增svc文件，非支持ajax版本，wcf默认会生成一个抽象,一个class，一个svc文件
+3、返回实体如果没有无参数构造函数，那么在实体上要标记特性DataContractAttribute
+	同时属性上要标记特性DataMemberAttribute,调用方获取的数据中心才能看到属性值
+
+4、可以通过服务端开放一个接口的回调，让客户端来实现这个接口。
+	客户端调用服务的时候，服务端就可以调用这个回调，
+	服务端和客户单实现了双向通信
+	1、定义接口，在方法上标记特性OperationContract(isoneway=true),表示支持回调
+	2、在WCF服务接口上标记特性ServiceContract(CallbackContract=typeof(上面的接口))
+	3、在服务实现方法中通过OperationContext.Current.GetCallbackChannel<ICallBackService>()创建回调实例，
+		调用回调

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.1" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+		<ProjectReference Include="..\Nw.LiveBackgroundManagement.Common\Nw.LiveBackgroundManagement.Common.csproj" />
+		<ProjectReference Include="..\Nw.LiveBackgroundManagement.Models\Nw.LiveBackgroundManagement.Models.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+1、使用mysql，安装程序集:
+	Microsoft.EntityFrameworkCore
+	Microsoft.EntityFrameworkCore.Tools
+	Pomelo.EntityFrameworkCore.MySql
+
+2、从数据库反向到代码
+Scaffold-DbContext -Connection "Server=192.168.157.128;Port=3306;Database =mydemo; User ID =root ; Password =root" -Provider "Pomelo.EntityFrameworkCore.Mysql" -OutputDir Models
+
+//数据库反向生成数据实体代码
+Scaffold-DbContext "Server=192.168.157.128;Database=mydemo;user id=root;password=root;charset=utf8" Pomelo.EntityFrameworkCore.MySql -OutputDir Models -ContextDir Context -Context MyDemoContext -NoPluralize
+
+
+//数据库新加表，重新反向生成数据实体，去掉DbContext配置。让他生成新的DbContext,指定生成对应的数据库表名，就能添加新的数据实体。吧新加的DbContext里面的属性复制到之前的DbContext然后删除就行了
+Scaffold-DbContext "Server=192.168.157.128;Database=mydemo;user id=root;password=root;charset=utf8" Pomelo.EntityFrameworkCore.MySql -OutputDir Models -Tables "tb_addtable" -NoPluralize
+
+
+

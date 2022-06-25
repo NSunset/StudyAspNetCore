@@ -1,0 +1,7 @@
+1、反射是System.Reflection命名空间，可以读取清单数据，并使用清单数据。是微软提供的帮助类库
+
+2、var assembly= Assembly.LoadFrom(“path”)//dll名称，带后缀：获取类库信息
+3、Type type=assembly.GetType("path")//类型全名称：获取类型
+4、Activatator.CreateInstance(type)//创建对象
+5、反射可以破坏单例，可以突破方法的权限限制
+6、性能：

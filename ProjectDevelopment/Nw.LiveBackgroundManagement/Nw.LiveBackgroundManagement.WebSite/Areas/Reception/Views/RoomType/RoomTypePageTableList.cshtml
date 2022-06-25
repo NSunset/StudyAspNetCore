@@ -1,0 +1,36 @@
+﻿
+@using Nw.LiveBackgroundManagement.Models.ViewModel
+@using Nw.LiveBackgroundManagement.WebSite.Utility.CustomPageComponent
+@model CustomPageModel<RoomTypeViewModel>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>房间类型</th>
+        <th>房间描述</th>
+    </tr>
+    @foreach (RoomTypeViewModel item in Model.DataList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @*<a id="detail" href="javascript:;" onclick="Detail(@item.Id)"  class="btn btn-sm yellow"><i class="fa fa-cogs"></i></a>*@
+                <a id="edit" href="javascript:;" onclick="DetailRoomType(@item.Id)" class="btn btn-sm green"><i class="fa fa-edit"></i></a>
+                <a id="delete" href="javascript:;" onclick="Delete(@item.Id)" class="btn btn-sm red"><i class="fa fa-times"></i></a>
+            </td>
+        </tr>
+    }
+</table>
+<CustomPager total="@Model.RecordCount"
+             page-index="@Model.PageIndex"
+             page-size="@Model.PageSize"
+             route-url="RoomTypeView"
+             query="SearchString=@Model.SearchString&url=">
+</CustomPager> 

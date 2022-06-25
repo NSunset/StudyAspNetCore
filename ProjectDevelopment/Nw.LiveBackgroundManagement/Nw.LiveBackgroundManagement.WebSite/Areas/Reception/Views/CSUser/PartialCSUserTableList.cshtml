@@ -1,0 +1,138 @@
+﻿@using Nw.LiveBackgroundManagement.Models.ViewModel
+@using Nw.LiveBackgroundManagement.WebSite.Utility.CustomPageComponent
+@using Nw.LiveBackgroundManagement.Models.CSEnum
+@model CustomPageModel<UserViewModel>
+
+<style>
+    td > .btn {
+        padding: 2px 10px;
+    }
+</style>
+<table class="table">
+    <tr>
+        <th>主键Id</th>
+        <th>用户名</th>
+        @*<th>密码</th>*@
+        <th>用户类别</th>
+        <th>状态</th>
+        <th>电话</th>
+        <th>手机号</th>
+        <th>邮箱</th>
+        <th>QQ号</th>
+        <th>微信号</th>
+        <th>性别</th>
+        <th>地址</th>
+        <th>审批状态</th>
+        <th>操作</th>
+    </tr>
+    @foreach (UserViewModel item in Model.DataList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>*@
+            <td>
+                @switch ((UserTypeEnum)item.UserType)
+                {
+                    case UserTypeEnum.OrdinaryUsers:
+                        <span class="label label-sm label-success">普通用户</span>
+                        break;
+                    case UserTypeEnum.Anchor:
+                        <span class="label label-sm label-warning">主播用户</span>
+                        break;
+                    default:
+                        break;
+                }
+                @*@Html.DisplayFor(modelItem => item.UserType)*@
+            </td>
+            <td>
+                @switch ((UserStatusEnum)item.Status)
+                {
+                    case UserStatusEnum.Normal:
+                        @*@Html.DisplayFor(modelItem => item.Status)*@
+                        <span class="label label-sm label-success">正常</span>
+                        break;
+                    case UserStatusEnum.Frozen:
+                        <span class="label label-sm label-warning"> 冻结 </span>
+                        @*@Html.DisplayFor(modelItem => item.Status)*@
+                        break;
+                    case UserStatusEnum.Delete:
+                        <span class="label label-sm label-success"> 已删除 </span>
+                        @*@Html.DisplayFor(modelItem => item.Status)*@
+                        break;
+                    default:
+                        break;
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mobile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QQ)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeChat)
+            </td>
+            <td>
+                @switch ((UserSexEnum)item.Sex)
+                {
+                    case UserSexEnum.Male:
+                        <span class="label label-sm label-success">男</span>
+                        break;
+                    case UserSexEnum.Female:
+                        <span class="label label-sm label-warning"> 女</span>
+                        break;
+                    case UserSexEnum.Simon:
+                        break;
+                    default:
+                        break;
+                }
+                @*@Html.DisplayFor(modelItem => item.Sex)*@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplysState)
+            </td>
+            <td>
+
+                @if (item.Status == (int)UserStatusEnum.Frozen)
+                {
+                    <a href="javascript:;" onclick="Thaw(@item.Id)" class="btn btn-sm green"><i class="fa fa-check"></i>解冻</a>
+                }
+                @if (item.Status == (int)UserStatusEnum.Normal)
+                {
+                    <a href="javascript:;" onclick="Frozen(@item.Id)" class="btn btn-sm yellow"><i class="fa fa-edit"></i>冻结</a>
+                    @if (item.ApplysState == (int)ApprovalStatusEnum.UnderApproval)
+                    {
+                        <a href="javascript:;" onclick="Approval(@item.Id)" class="btn btn-sm green"><i class="fa fa-edit"></i>审批</a>
+                    }
+                    @if (item.ApplysState == (int)ApprovalStatusEnum.Approved)
+                    {
+                        <a href="javascript:;" onclick="ApprovalDetail(@item.Id)" class="btn btn-sm green"><i class="fa fa-edit"></i>审批详情</a>
+                    }
+                }
+
+            </td>
+        </tr>
+    }
+</table>
+<CustomPager total="@Model.RecordCount"
+             page-index="@Model.PageIndex"
+             page-size="@Model.PageSize"
+             route-url="csuserallview"
+             query="SearchString=@Model.SearchString&url=">
+</CustomPager>

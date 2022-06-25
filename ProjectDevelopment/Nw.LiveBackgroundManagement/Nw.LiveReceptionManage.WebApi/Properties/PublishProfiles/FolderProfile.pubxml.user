@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>E:\GitRepository\ActualCombat\ProjectDevelopment\brunk\2022-5-24\Nw.LiveBackgroundManagement\Nw.LiveReceptionManage.WebApi\bin\Release\net5.0\publish\</_PublishTargetUrl>
+    <History>True|2022-06-02T10:38:56.3449314Z;True|2022-06-02T18:08:34.0321827+08:00;True|2022-06-02T17:41:07.2552176+08:00;True|2022-06-02T11:56:37.7199834+08:00;True|2022-06-02T10:48:06.6564595+08:00;</History>
+  </PropertyGroup>
+</Project>

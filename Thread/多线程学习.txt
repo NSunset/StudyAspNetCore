@@ -1,0 +1,53 @@
+需要任务并发的时候，使用多线程,以资源换性能，提高性能，改善用户体验
+
+
+委托的异步回调，core不支持。只能在.netFeromWork使用
+1、异步：不卡顿界面，因为主线程闲置
+2、异步方法快，因为多线程开发，以资源换性能
+3、异步方法无序，开始和结束都是无顺序的 
+4、可以通过异步回调控制执行顺序
+
+
+Task
+1、多线程最佳实现
+	线程来自于线程池
+2、Task.WaitAll()：等待所有线程完成，卡界面
+	task.Wait()指定线程等待完成，卡界面
+3、子线程依附父线程，实现，父线程等待时，子线程也一起等待
+	创建子线程时，指定参数TaskCreationOptions为TaskCreationOptions.AttrachedToParent
+
+3、Task.Delay()等待，不阻塞
+	Task.Delay().ContinueWith(委托)不阻塞并且延迟指定时间后运行操作
+
+4、Task.WaitAny()：等待任意一个线程执行完毕，然后往后执行，也会卡顿界面
+
+5、TaskFactory().ContinueWhenAny()：等待任意一个线程执行完成，不卡顿界面
+
+6、TaskFactory().ContinueWhenAll()：等待所有线程执行完成，不卡顿界面
+
+7、Parallel   并行执行，循环执行线程
+	ParallecOptions
+		MaxDegreeOfParallelism设置线程的数量
+
+8、通过线程等待可以捕捉到异常，异常类型为AggregateException
+	可通过AggregateException.InnerExceptions获取多线程中所有的异常
+
+9、如果要实现一个线程异常，就让其他线程停止下来，需要使用CancellationTokenSource
+	CancellationTokenSource：
+		IsCancellationRequested：默认值false
+		Cancel方法：只要执行这个方法，既可以把IsCancellationRequested指定为true
+		Cancel方法可以重复调用
+通过以上属性和方法可以实现线程取消,如果需要让多个线程一组，可以给线程加上CancellationTokenSource.token
+
+10、线程安全：system.Collections.Concurrent
+	lock：不推荐
+	线程安全结构
+		BlockingCollection<T>：线程安全集合
+		ConcurrentBag<T>：线程安全包
+		ConcurrentDictionary<Key,Value>：线程安全字典
+		ConcurrentQueue<T>：线程安全队列
+		ConcurrentStack<T>：线程安全栈
+
+
+
+

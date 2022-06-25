@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="createOrderForm">
+      <p>商品ID：<input type="text" name="ProductId"/></p>
+      <p>用户ID：<input type="text" name="UserId" /></p>
+      <p>商品数量：<input type="text" name="Count" /></p>
+      <p>价格：<input type="text" name="Money" /></p>
+    </form>
+      <p>
+        <button id="btn_order">生成订单</button>
+      </p>
+    <p>
+      <ul id="response">
+
+      </ul>
+    </p>
+
+  <script src="./js/jquery-3.6.0.min.js"></script>
+  <script>
+    
+   $("#btn_order").click(function(){
+    // let order={
+    //     ProductId:document.getElementById("ProductId").value,
+    //     UserId:document.getElementById("UserId").value,
+    //     Count:document.getElementById("Count").value,
+    //     Money:document.getElementById("Money").value,
+    //   };
+
+      //[frombody]
+      // $.ajax({
+      //   url:"https://localhost:9000/api/Order/create",
+      //   type:"post",
+      //   async:true,
+      //   data:JSON.stringify(order),
+      //   contentType:"application/json",
+      //   success:function(resp){
+      //     console.log(resp);
+      //     let nli= document.createElement("li");
+      //     nli.innerHTML=resp.message;
+      //     document.getElementById("response").appendChild(nli);
+      //   }
+
+      // });
+
+      //[fromfrom]
+      // $.ajax({
+      //   url:"http://192.168.1.2:9000/api/Order/create",
+      //   type:"post",
+      //   data:$("#createOrderForm").serialize(),
+      //   contentType:"application/x-www-form-urlencoded",
+      //   success:function(resp){
+      //     console.log(resp);
+      //     let nli= document.createElement("li");
+      //     nli.innerHTML=resp.message;
+      //     document.getElementById("response").appendChild(nli);
+      //   },
+      //   error: function (result) {
+      //       console.log(result);
+      //   }
+
+      // });
+
+      //使用网关访问
+      $.ajax({
+        url:"http://192.168.1.2:10000/api/Order/create",
+        type:"post",
+        data:$("#createOrderForm").serialize(),
+        contentType:"application/x-www-form-urlencoded",
+        success:function(resp){
+          console.log(resp);
+          let nli= document.createElement("li");
+          nli.innerHTML=resp.message;
+          document.getElementById("response").appendChild(nli);
+        },
+        error: function (result) {
+            console.log(result);
+        }
+
+      });
+
+
+   });
+
+  </script>
+  </body>
+
+</html>

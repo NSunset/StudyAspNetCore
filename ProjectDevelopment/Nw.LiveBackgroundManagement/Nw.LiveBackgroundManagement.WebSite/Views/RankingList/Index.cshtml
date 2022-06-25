@@ -1,0 +1,330 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat blue">
+            <div class="visual">
+                <i class="fa fa-comments"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="1349">1349</span>
+                </div>
+                <div class="desc"> New Feedbacks </div>
+            </div>
+            <a class="more" href="javascript:;">
+                最佳人气主播
+                <i class="m-icon-swapright m-icon-white"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat red">
+            <div class="visual">
+                <i class="fa fa-bar-chart-o"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="12,5">12,5</span>M$
+                </div>
+                <div class="desc"> Total Profit </div>
+            </div>
+            <a class="more" href="javascript:;">
+                年获赞最多主播
+                <i class="m-icon-swapright m-icon-white"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat green">
+            <div class="visual">
+                <i class="fa fa-shopping-cart"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="549">549</span>
+                </div>
+                <div class="desc"> New Orders </div>
+            </div>
+            <a class="more" href="javascript:;">
+                月获赞最多主播
+                <i class="m-icon-swapright m-icon-white"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat purple">
+            <div class="visual">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    +
+                    <span data-counter="counterup" data-value="89">89</span>%
+                </div>
+                <div class="desc"> Brand Popularity </div>
+            </div>
+            <a class="more" href="javascript:;">
+                日获赞最多主播
+                <i class="m-icon-swapright m-icon-white"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!--<div class="row">
+    <div class="col-md-6 col-sm-6">
+        <div class="portlet-title">
+            <div class="caption font-red">
+                <span class="caption-subject bold uppercase">今日主播人气排行</span>
+                <span class="caption-helper">今日人气最佳主播Top10</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div id="chartDaydiv" class="CSSAnimationChart"></div>
+        </div>-->
+<!-- END PORTLET-->
+<!--</div>
+</div>-->
+
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="portlet-title">
+            <div class="caption font-red">
+                <span class="caption-subject bold uppercase">今日主播人气排行</span>
+                <span class="caption-helper">今日人气最佳主播Top10</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div id="chartDaydiv" class="CSSAnimationChart"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="portlet-title">
+            <div class="caption font-red">
+                <span class="caption-subject bold uppercase">本周主播人气排行</span>
+                <span class="caption-helper">本周主播人气排行Top10</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div id="chartWeekdiv" class="CSSAnimationChart"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="portlet-title">
+            <div class="caption font-red">
+                <span class="caption-subject bold uppercase">本月主播人气排行</span>
+                <span class="caption-helper">本月主播人气排行Top10</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div id="chartMonthdiv" class="CSSAnimationChart"></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <!-- Chart code -->
+    <script type="text/javascript">
+
+        @*var data="@ViewBag.TopOfTheMonth" //这样穿会有很多转义字符*@
+
+        var data =@Html.Raw(@ViewBag.TopOfTheMonth);
+        $(function () {
+            var chartDaydiv = InitChart("chartDaydiv")
+            var chartWeekdiv = InitChart("chartWeekdiv")
+            var chartMonthdiv = InitChart("chartMonthdiv")
+
+            EveryThreeSeconds();
+            setInterval("EveryThreeSeconds()", "3000"); //定时的
+            //LoadChartData(chartDaydiv, chartWeekdiv, chartMonthdiv);
+        })
+
+
+        var EveryThreeSeconds = function () {
+            $.ajax({
+                url: "Statistics",
+                data: {},
+                method: "Get",
+                success: function (response) {
+                    var daydata = response.daydata;
+                    var weekdata = response.weekdata;
+                    var monthdata = response.monthdata;
+                    if (!chartDaydiv.data || chartDaydiv.data.length <= 0 || !daydata || daydata.length <= 0) {
+                        chartDaydiv.data = daydata;
+                        chartDaydiv.invalidateRawData();
+                    }
+                    else {
+                        am4core.array.each(chartDaydiv.data, function (item) {
+                            $.each(daydata, function (index, fdata) {
+                                if (item.ranking == fdata.ranking) {
+                                    item.popularity = fdata.popularity;
+                                }
+                            })
+                        })
+                        chartDaydiv.invalidateRawData();
+                    }
+
+                    /**weekdata**/
+                    if (!chartWeekdiv.data || chartWeekdiv.data.length <= 0 || !weekdata || weekdata.length <= 0) {
+                        chartWeekdiv.data = weekdata;
+                        chartWeekdiv.invalidateRawData();
+                    }
+                    else {
+                        am4core.array.each(chartWeekdiv.data, function (item) {
+                            $.each(weekdata, function (index, fdata) {
+                                if (item.ranking == fdata.ranking) {
+                                    item.popularity = fdata.popularity;
+                                }
+                            })
+                        })
+                        chartWeekdiv.invalidateRawData();
+                    }
+                    /**monthdata**/
+                    if (!chartMonthdiv.data || chartMonthdiv.data.length <= 0 || !monthdata || monthdata.length <= 0) {
+                        chartMonthdiv.data = daydata;
+                        chartMonthdiv.invalidateRawData();
+                    }
+                    else {
+                        am4core.array.each(chartMonthdiv.data, function (item) {
+                            $.each(monthdata, function (index, fdata) {
+                                if (item.ranking == fdata.ranking) {
+                                    item.popularity = fdata.popularity;
+                                }
+                            })
+                        })
+                        chartMonthdiv.invalidateRawData();
+                    }
+
+                }
+            })
+        }
+
+        var InitChart = function (div) {
+            am4core.useTheme(am4themes_animated);
+            var chart = am4core.create(div, am4charts.XYChart);
+            chart.data = [];
+            chart.padding(10, 10, 10, 10);
+            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            categoryAxis.renderer.grid.template.location = 0;
+            categoryAxis.dataFields.category = "ranking";
+            categoryAxis.renderer.minGridDistance = 60;
+            categoryAxis.renderer.inversed = true;
+            categoryAxis.renderer.grid.template.disabled = true;
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.min = 0;
+            valueAxis.extraMax = 0.1;
+            valueAxis.rangeChangeEasing = am4core.ease.linear;
+            valueAxis.rangeChangeDuration = 1500;
+            var series = chart.series.push(new am4charts.ColumnSeries());
+            series.dataFields.categoryX = "ranking";
+            series.dataFields.valueY = "popularity";
+            series.tooltipText = "{valueY.value}"
+            series.columns.template.strokeOpacity = 0;
+            series.columns.template.column.cornerRadiusTopRight = 5;
+            series.columns.template.column.cornerRadiusTopLeft = 5;
+            series.interpolationDuration = 1500;
+            series.interpolationEasing = am4core.ease.linear;
+            var labelBullet = series.bullets.push(new am4charts.LabelBullet());
+            //labelBullet.label.verticalCenter = "bottom";
+            labelBullet.label.dy = -10;
+            labelBullet.label.text = "{values.valueY.workingValue.formatNumber('#.')}";
+            chart.zoomOutButton.disabled = true;
+            // //由于默认情况下同一系列的列具有相同的颜色，因此我们添加了从图表.颜色颜色集
+            series.columns.template.adapter.add("fill", function (fill, target) {
+                return chart.colors.getIndex(target.dataItem.index);
+            });
+            categoryAxis.sortBySeries = series;
+            return chart;
+        }
+
+        //websocket
+        var LoadChartData = function (chartDaydiv, chartWeekdiv, chartMonthdiv) {
+
+            var uri = "WS://localhost:5000/WebSocketConnect";
+           var  websocket = new WebSocket(uri);
+            websocket.onopen = function (e) {
+                console.log("链接已打开！");
+            };
+            websocket.onclose = function (e) {
+                console.log("链接已关闭！");
+            };
+            websocket.onmessage = function (e) {
+                var freshData = JSON.parse(e.data);
+                var daydata = freshData.daydata;
+                var weekdata = freshData.weekdata;
+                var monthdata = freshData.monthdata;
+
+                /**daydata**/
+                if (!chartDaydiv.data || chartDaydiv.data.length <= 0 || !daydata || daydata.length <= 0)
+                {
+                    chartDaydiv.data = daydata;
+                    chartDaydiv.invalidateRawData();
+                }
+                else {
+
+                    am4core.array.each(chartDaydiv.data, function (item) {
+                       $.each(daydata, function (index,fdata) {
+                           if (item.ranking == fdata.ranking) {
+                               item.popularity = fdata.popularity;
+                           }
+                       })
+                   })
+                    chartDaydiv.invalidateRawData();
+                }
+
+                /**weekdata**/
+                if (!chartWeekdiv.data || chartWeekdiv.data.length <= 0 || !weekdata || weekdata.length <= 0) {
+                    chartWeekdiv.data = weekdata;
+                    chartWeekdiv.invalidateRawData();
+                }
+                else {
+                    am4core.array.each(chartWeekdiv.data, function (item) {
+                        $.each(weekdata, function (index,fdata) {
+                            if (item.ranking == fdata.ranking) {
+                                item.popularity = fdata.popularity;
+                            }
+                        })
+                    })
+                    chartWeekdiv.invalidateRawData();
+                }
+
+                /**monthdata**/
+                if (!chartMonthdiv.data || chartMonthdiv.data.length <= 0 || !monthdata || monthdata.length <= 0) {
+                    chartMonthdiv.data = monthdata;
+                    chartMonthdiv.invalidateRawData();
+                }
+                else {
+                    am4core.array.each(chartMonthdiv.data, function (item) {
+                        $.each(monthdata, function (index,fdata) {
+                            if (item.ranking == fdata.ranking) {
+                                item.popularity = fdata.popularity;
+                            }
+                        })
+                    })
+                    chartMonthdiv.invalidateRawData();
+                }
+            };
+            websocket.onerror = function (e) {
+                console.error("异常消息"+ e.data);
+            };
+            //setTimeout(function () {
+            //    websocket.send("测试");
+            //}, 1000);
+        }
+    </script>
+
+}
+
+
+
+

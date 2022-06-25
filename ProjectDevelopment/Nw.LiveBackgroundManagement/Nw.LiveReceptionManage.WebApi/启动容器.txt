@@ -1,0 +1,7 @@
+//创建镜像
+docker build -t live.webapi:v1 .
+
+//创建容器
+docker run --name myliveapi_01 -dp 7005:80 -v /project/api/livereceptionmanage.webapi/01:/app live.webapi:v1
+docker run --name myliveapi_02 -dp 7006:80 -v /project/api/livereceptionmanage.webapi/02:/app live.webapi:v1
+docker run --name myliveapi_03 -dp 7007:80 -v /project/api/livereceptionmanage.webapi/03:/app live.webapi:v1

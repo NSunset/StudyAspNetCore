@@ -1,0 +1,110 @@
+﻿@using Nw.LiveBackgroundManagement.Models.ViewModel
+@using Nw.LiveBackgroundManagement.WebSite.Utility.CustomPageComponent
+@model CustomPageModel<RoomTypeViewModel>
+
+
+<br />
+<div class="portlet-body">
+    <div class="table-toolbar">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="btn-group">
+                    <button id="addRoomTypeId" class="btn sbold green">
+                        添加房间类别
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        td > .btn {
+            padding: 2px 10px;
+        }
+    </style>
+    @await Html.PartialAsync("../../Areas/Reception/Views/RoomType/RoomTypePageTableList", Model);
+</div>
+
+@await Html.PartialAsync("../../Areas/Reception/Views/RoomType/AddOrUpdateRoomtype");
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#addRoomTypeId").on("click", function () {
+                //$("#Description").val("");
+                //$("#Text").val("");
+                //$("#roomTypeId").val("");
+                //$('#adduser').modal();
+                $.ajax({
+                    url: "DetailRoomtype",
+                    data: { id: 0 },
+                    method: "GET",
+                    success: function (response) {
+                        $("#detail").html(response);
+                        $("#addorUpdateType").modal();
+                    }
+                })
+
+            })
+
+            $("#submit").on("click", function () {
+                var fromData = SerializeObject($("#userForm"));
+                $.ajax({
+                    url: "AddRoomType",
+                    data: fromData,
+                    method: "POST",
+                    success: function (response) {
+                        $('#adduser').modal('hide');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                })
+            })
+            //序列化表单成实体对象用于数据传输
+            function SerializeObject(form) {
+                var o = {};
+                var a = form.serializeArray();
+                $.each(a,
+                    function () {
+                        if (o[this.name] !== undefined) {
+                            if (!o[this.name].push) {
+                                o[this.name] = [o[this.name]];
+                            }
+                            o[this.name].push(this.value || '');
+                        } else {
+                            o[this.name] = this.value || '';
+                        }
+                    });
+                return o;
+            }
+        })
+
+        //新增或者编辑的悬浮框
+        function DetailRoomType(id) {
+            $.ajax({
+                url: "DetailRoomtype",
+                data: { id: id },
+                method: "GET",
+                success: function (response) {
+                    $("#detail").html(response);
+                    $("#addorUpdateType").modal();
+                }
+            })
+        }
+
+        //新增或者编辑的悬浮框
+        function Delete(id) {
+            $.ajax({
+                url: "DeleteRoomtype",
+                data: { id: id },
+                method: "POST",
+                success: function (response) {
+                    location.reload();
+                }
+            })
+        }
+    </script>
+}
+
+

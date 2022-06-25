@@ -1,0 +1,29 @@
+1、委托可以实例化，在实例化的时候需要传递一个方法
+	1、委托关键字delegate  例如:public delegate void CustomDelegate();
+	2、传递的方法结构要和委托一致
+
+2、委托的本质是一个类，继承自MuleicastDelegate父类
+	MuleicastDelegate是特殊类，自己无法继承
+
+3、BeginInvoke()：分配一个线程去执行方法
+
+4、EndInvoke()：回调的时候使用
+
+5、多播委托：我们声明的任何一个委托都是多播委托
+添加和当前委托参数返回值一致的多个方法
+	1、可以通过+=添加方法
+	2、可以通过-=移除方法
+
+6、多播委托不允许异步，不能使用BeginInvoke
+	可以通过GetInvocationList()方法比例委托执行BeginInvoke
+
+7、系统提供的委托
+	1、Action，是一个没有返回值，可以有参数的委托
+	2、Func，是一个有返回值，可以有参数的委托
+8、推荐使用系统提供的委托
+
+9、事件其实是委托+event关键字，事件只能在声明当前事件类的内部Invoke，即使在子类也不行。
+	安全性比委托高(委托使用的地方都能Invoke)
+
+
+

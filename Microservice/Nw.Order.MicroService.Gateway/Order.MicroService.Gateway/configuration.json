@@ -1,0 +1,83 @@
+//{
+//  "routes": [
+//    {
+//      //比如请求网关url： http://192.168.1.2:10000/api/order/create  => {url} = /api/order/create
+//      //根据下面配置会转换为 http://192.168.1.2:9001/api/order/create
+//      //上游url模板
+//      "upstreampathtemplate": "/{url}", //网关地址--url变量
+//      //上游请求方式
+//      "upstreamhttpmethod": [ "get", "post" ],
+//      //下游url模板
+//      "downstreampathtemplate": "/{url}", //服务地址--url变量
+//      //下游scheme
+//      "downstreamscheme": "http",
+//      //下游主机和端口
+//      "downstreamhostandports": [
+//        {
+//          "host": "192.168.1.2",
+//          "port": 9001 // 端口
+//        }
+//      ],
+//      //下游跨域配置
+//      "downstreamheadertransform": { // 配置跨域
+//        "access-control-allow-origin": "http://192.168.1.2:5500", //不存在就添加
+//        "access-control-allow-methods": "*",
+//        "access-control-allow-headers": "*"
+//      }
+//    }
+//  ]
+//}
+
+
+{
+  //网关结合Consul配置:需要添加程序集Ocelot.Provider.Consul
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/{url}", //网关地址--url变量
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UseServiceDiscovery": true, // 使用consul服务发现
+      "ServiceName": "OrderService", // 指定需要访问服务名称
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin" //轮询      LeastConnection-最少连接数的服务器   NoLoadBalance不负载均衡
+      },
+      "DownstreamPathTemplate": "/{url}", //服务地址--url变量
+      "DownstreamScheme": "http",
+      "DownstreamHeaderTransform": { // 配置跨域
+        "Access-Control-Allow-Origin": "http://192.168.1.2:5500", //不存在就添加
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Headers": "*"
+      }, // 添加限流,以下说明：在2秒内请求次数超过2次就限流5秒
+      "RateLimitOptions": {
+        "ClientWhitelist": [ "SuperClient" ], // 白名单，不需要限流
+        "EnableRateLimiting": true, // 启用限流
+        "Period": "5s",//限流的单位时间
+        "PeriodTimespan": 2,//客户端请求上限多少秒后重试
+        "Limit": 2//在指定时间内能发送的最大请求数
+      }
+    }
+    //{
+    //  "DownstreamPathTemplate": "/{url}",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "192.168.3.199",
+    //      "Port": 5201
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/service-a/{url}",
+    //  "UpstreamHttpMethod": [ "Get", "Post" ],
+    //  "AuthenticationOptions": {
+    //    "AuthenticationProviderKey": "SampleKey",
+    //    "AllowedScopes": [ "gatewayScope" ]
+    //  }
+    //}
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://192.168.1.2:10000", //网关对外地址
+    "ServiceDiscoveryProvider": {
+      "Host": "192.168.157.128",
+      "Port": 8500,
+      "Type": "Consul" //由Consul提供服务发现, 每次请求去consul
+    } //Ocelot没有支持配置多个Consul
+  }
+}

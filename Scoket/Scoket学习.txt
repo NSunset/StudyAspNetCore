@@ -1,0 +1,5 @@
+1、套接字，长链接。可以做双工
+2、添加包SuperSocket.Engine
+	三大对象：AppServer：表示Socket服务器实例
+		Session：客户端和服务器之间的链接实例
+		Commands：数据传输的各种命令

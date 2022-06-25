@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nw.LiveBackgroundManagement.Business.Interface\Nw.LiveBackgroundManagement.Business.Interface.csproj" />
+    <ProjectReference Include="..\Nw.LiveBackgroundManagement.Common\Nw.LiveBackgroundManagement.Common.csproj" />
+    <ProjectReference Include="..\Nw.LiveBackgroundManagement.DataAccessEFCore\Nw.LiveBackgroundManagement.DataAccessEFCore.csproj" />
+    <ProjectReference Include="..\Nw.LiveBackgroundManagement.Models\Nw.LiveBackgroundManagement.Models.csproj" />
+  </ItemGroup>
+
+</Project>

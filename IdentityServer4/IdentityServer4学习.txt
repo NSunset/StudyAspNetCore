@@ -1,0 +1,23 @@
+OAuth2.0：授权协议，标准。客户端不是指浏览器。而是指运行的具体的程序
+
+OpenId Connect：鉴权协议，标准。包含一些用户的信息
+
+IdentityServer4是为ASPNET Core量身打造的一款基于OpenID Connect 和 OAuth 2.0认证框架
+
+客户端模式：机器和机器之间做一些资源的交互，需要认证。
+
+密码模式：用户委托客户端调用授权中心换token，在用token访问被保护资源
+	一般情况下，客户端和授权中心信任度很高。（因为授权中心要使用用户的账户登录，所以客户端要很信任授权中心）
+
+
+
+客户端模式最小配置：
+	1、安装Duende.IdentityServer
+		dotnet new -i Duende.IdentityServer.Templates::5.2.1，安装支持.net版本为5.0.x
+		dotnet new isempty -n IdentityServer 创建授权中心项目
+	2、受保护资源添加包Microsoft.AspNetCore.Authentication.JwtBearer
+	3、客户端需要添加包IdentityModel
+
+code模式最小配置
+	1、dotnet new isinmem -n Nw.IdentityServer 创建授权中心mvc项目
+	2、创建客户端mvc程序。添加包Microsoft.AspNetCore.Authentication.OpenIdConnect

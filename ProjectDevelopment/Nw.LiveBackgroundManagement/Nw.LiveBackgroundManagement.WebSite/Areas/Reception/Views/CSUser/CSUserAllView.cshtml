@@ -1,0 +1,275 @@
+﻿@using Nw.LiveBackgroundManagement.Models.ViewModel
+@using Nw.LiveBackgroundManagement.WebSite.Utility.CustomPageComponent
+@model CustomPageModel<UserViewModel>
+@{
+    ViewData["Title"] = "RoomView";
+}
+<br />
+<div class="portlet-body">
+    <div class="table-toolbar">
+        @using (Html.BeginForm("CSUserAllView", "CSUser", FormMethod.Get, new { @class = "form-inline", @id = "SearchFrom" }))
+        {
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="btn-group">
+                        <input type="text" value="@ViewBag.searchString" name="searchString" class="form-control" placeholder="用户名/电话/手机号/邮箱/QQ/微信">
+                    </div>
+                    <div class="btn-group">
+                        <div class="col-md-5">
+                            <select class="form-control input-small input-inline" name="userType" value="@ViewBag.userType" id="userType" onchange="Search()">
+                                @if (@ViewBag.userType == "0")
+                                {
+                                    <option value="0" selected="selected">全部用户</option>
+                                }
+                                else
+                                {
+                                    <option value="0">全部用户</option>
+                                }
+
+                                @if (@ViewBag.userType == "2")
+                                {
+                                    <option value="2" selected="selected">主播</option>
+                                }
+                                else
+                                {
+                                    <option value="2">主播</option>
+                                }
+
+                                @if (@ViewBag.userType == "1")
+                                {
+                                    <option value="1" selected="selected">普通用户</option>
+                                }
+                                else
+                                {
+                                    <option value="1">普通用户</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" id="addroomId" class="btn sbold green">
+                            查询
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @await Html.PartialAsync("../../Areas/Reception/Views/CSUser/PartialCSUserTableList", Model) 
+</div>
+
+@*冻结*@
+<div class="modal fade" id="Frozen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    提示
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-box">
+                    <div class="form-group">
+                        确定冻结该用户吗？
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="colse" type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button id="confirmFrozen" onclick="ConfirmFreeze()" type="button" class="btn sbold green">
+                    确定冻结
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*解冻*@
+<div class="modal fade" id="ThawUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    提示
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-box">
+                    <div class="form-group">
+                        确定解冻该用户吗？
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="colse" type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button onclick="confirmThawUser()" type="button" class="btn sbold green">
+                    确定冻结
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+隐藏域
+<input type="hidden" id="userid" />
+
+审批
+<div class="modal fade" id="Approval" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    审批
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-box" id="content">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="colse" type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button onclick="ConfirmApproval()" type="button" class="btn sbold green">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+        //$(function () {
+        //    debugger;
+        //    $("#userType").on("onchange", function () {
+        //        debugger;
+        //        $("#SearchFrom").submit();
+        //    })
+        //})
+
+        function Search() {
+            $("#SearchFrom").submit();
+        }
+
+        //冻结
+        function Frozen(id) {
+            $('#Frozen').modal();
+            $("#userid").val(id);
+        }
+
+        ///确认冻结
+        function ConfirmFreeze() {
+            var userid = $("#userid").val();
+            $.ajax({
+                url: "FreezeUser",
+                data: { userId: userid },
+                method: "GET",
+                success: function (response) {
+                    if (response.result == 1) {
+                        $("#userid").val("");
+                        $('#Frozen').modal('hide');
+                        var result = response.result;
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                }
+            })
+        }
+
+        ///解冻
+        function Thaw(userid) {
+            $('#ThawUser').modal();
+            $("#userid").val(userid);
+        }
+
+        //确认解冻
+        function confirmThawUser() {
+            var userid = $("#userid").val();
+            $.ajax({
+                url: "ThawUser",
+                data: { userId: userid },
+                method: "GET",
+                success: function (response) {
+                    if (response.result == 1) {
+                        $("#userid").val("");
+                        $('#ThawUser').modal('hide');
+                        var result = response.result;
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                }
+            })
+        }
+
+        ///审批
+        function Approval(id) {
+            $("#userid").val(id);
+            $.ajax({
+                url: "ApprovalView",
+                data: { userId: id },
+                method: "GET",
+                success: function (response) {
+                    $("#content").html(response);
+                    $('#Approval').modal();
+                }
+            })
+        }
+
+        ///确认审批
+        function ConfirmApproval() {
+            var approval = $('input:radio:checked').val();
+            var msessage = $("#ApprovalMessge").val();
+            var userId = $("#userid").val(); 
+            $.ajax({
+                url: "ApprovalAnchor",
+                data: { userId: userId, approvalState: approval, approvalMsg: msessage },
+                method: "GET",
+                success: function (response) {
+                    if (response.result == 1) {
+                        $("#ApprovalMessge").val("");
+                        $('#Approval').modal();
+                        $("#hidden").val("");
+                        var result = response.result;
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                }
+            })
+        }
+
+        //审批详情
+        function ApprovalDetail(id) {
+            $.ajax({
+                url: "ApprovalDetailView",
+                data: { userId: id },
+                method: "GET",
+                success: function (response) {
+                    $("#content").html(response);
+                    $('#Approval').modal();
+                }
+            })
+        }
+
+    </script>
+
+}

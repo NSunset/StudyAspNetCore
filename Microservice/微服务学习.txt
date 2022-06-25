@@ -1,0 +1,32 @@
+consul：服务注册与发现组件
+	1、服务注册：api启动的时候注册到服务发现组件上面。
+	2、服务发现：：在服务实例进行伸缩（加，减）时能保证获取的服务实例是可用的。
+		通过心跳来保证，如果心跳连不上就剔除服务
+
+Ocelot：网关
+
+docker 启动consul容器
+
+docker run \
+     -d \
+     -p 8500:8500 \
+     -p 8600:8600/udp \
+     -v /project/consul/conf/:/consul/conf/ \
+     -v /project/consul/data/:/consul/data/ \
+     --name=consul \
+     consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client='0.0.0.0'
+
+//storage
+dotnet run --urls="http://*:8001" --consul:ip=192.168.1.2 --consul:port=8001 --consul:weight=1
+dotnet run --urls="http://*:8002" --consul:ip=192.168.1.2 --consul:port=8002 --consul:weight=3
+dotnet run --urls="http://*:8003" --consul:ip=192.168.1.2 --consul:port=8003 --consul:weight=6
+
+//account
+dotnet run --urls="http://*:7001" --consul:ip=192.168.1.2 --consul:port=7001 --consul:weight=1
+dotnet run --urls="http://*:7002" --consul:ip=192.168.1.2 --consul:port=7002 --consul:weight=3
+dotnet run --urls="http://*:7003" --consul:ip=192.168.1.2 --consul:port=7003 --consul:weight=6
+
+//order
+dotnet run --urls="http://*:9001" --consul:ip=192.168.1.2 --consul:port=9001 --consul:weight=1
+dotnet run --urls="http://*:9002" --consul:ip=192.168.1.2 --consul:port=9002 --consul:weight=3
+dotnet run --urls="http://*:9003" --consul:ip=192.168.1.2 --consul:port=9003 --consul:weight=6

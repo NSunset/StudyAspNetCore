@@ -1,0 +1,6 @@
+1、定时调度作业
+2、分3个角色：存储器，客户端，服务
+
+3、来分离job和Server，吧作业保存到数据库持久化，Server来具体执行
+
+4、添加Hangfire.Core，Hangfire.AspNetCore，Hangfire.MySqlStorage,Hangfire.HttpJob

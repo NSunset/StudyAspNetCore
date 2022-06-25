@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = null;
+}
+@using Nw.LiveBackgroundManagement.Models.ViewModel
+@model List<CSUserApplyViewModel>
+
+<div class="timeline">
+    @if (Model != null)
+    {
+        int index = 1;
+
+        foreach (CSUserApplyViewModel apply in Model)
+        {
+            <div class="timeline-item">
+                <div class="timeline-badge" style="padding-right: 0px">
+                    <span class="label label-sm label-success">@apply.StrLastModifyTime</span>
+                    <span class="label label-sm label-success">@apply.StateMessage</span>
+                </div>
+                <div class="timeline-body">
+                    <div class="timeline-body-head">
+                        <div class="timeline-body-head-caption">
+                            @apply.ApprovalMsg
+                        </div>
+                        <div class="timeline-body-head-actions"> </div>
+                    </div>
+                </div>
+            </div>
+            index = index + 1;
+        }
+        <div class="timeline-item">
+            <div class="timeline-body">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <div class="icheck-inline">
+                            <input type="radio" value="2" name="Approval" checked="checked" />审批通过
+                        </div>
+                        <div class="icheck-inline">
+                            <input type="radio" value="3" name="Approval" />审批驳回
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-body-arrow">
+                </div>
+                <div class="timeline-body-head">
+                    <div class="timeline-body-head-caption">
+                        <textarea class="form-control" rows="2" id="ApprovalMessge" placeholder="审批意见" style="margin: 0px -36.95px 0px 0px; width: 350px; height: 96px;"></textarea>
+                    </div>
+                    <div class="timeline-body-head-actions">  </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

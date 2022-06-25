@@ -1,0 +1,17 @@
+1、Directory.Exists()：检测文件夹是否存在
+2、DirectoryInfo：文件夹描述对象，不存在不报错。
+3、File.Exists()：检测文件是否存在
+	Path.Combine()：拼接路径，得到一个完成路径
+4、FileInfo：文件描述对象
+
+5、Directory.CreateDirectory()：一次性创建全部的子路径
+6、Directory.Move：移动，原文件夹就不存在了
+7、Directory.Delete：删除
+
+8、File.Create()：创建文件流，这里写入会覆盖原有内容
+9、File.AppendText()：流写入器，追加内容
+10、File.ReadAllLines()：文件读取
+11、File.OpenRead()：分批读取
+
+12、BinaryFormatter：序列化器，可以序列化数据到文件中，或者反序列化文件流成为数据
+	XmlSerializer：xml序列化器
